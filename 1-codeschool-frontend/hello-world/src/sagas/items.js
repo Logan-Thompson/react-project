@@ -13,3 +13,15 @@ export function* createItem(action) { // eslint-disable-line import/prefer-defau
     console.log(err);
   }
 }
+
+export function* updateItem(action) {
+  try {
+    const item = yield call(itemsApi.updateItemPromise, action.item);
+    yield put({
+      type: actions.EMPLOYEE_UPDATE_RES,
+      item,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}

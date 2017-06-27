@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { EMPLOYEE_CREATE_REQ } from '../actions';
+import EmployeeList from './EmployeeList';
+import { EMPLOYEE_CREATE_REQ, EMPLOYEE_UPDATE_REQ } from '../actions';
 
 const propTypes = {
   employees: PropTypes.array,
@@ -59,11 +60,42 @@ class HomeView extends Component {
     this.onItemUpdate({ ...editEmployee, completed: true });
   }
 
+  onItemEdit = () => {
+    const { editItem } = this.state;
+    console.log(editItem.id, editItem.name);
+  }
+
+  onItemClick = (event) => {
+    const { employees } = this.props;
+    const { value } = event.target;
+    this.setState({ editItem: employees[value] });
+  }
+
+  onEditItemChange = (event) => {
+    const { id } = this.state.editItem;
+    const editItem = {
+      name: event.target.value,
+      id,
+    };
+
+    this.setState({ editItem });
+  }
+
+  onItemUpdate = () => {
+    const { editItem } = this.state;
+    this.props.dispatch({
+      type: EMPLOYEE_UPDATE_REQ,
+      item: editItem,
+    });
+    this.setState({ editItem: { name: ' ' } });
+  }
+
   render() {
+    const { employees } = this.props;
     const { currentEmployee } = this.state;
     return (
       <div>
-        <div>
+        <div className="addEmployee">
           <input
             name="name"
             placeholder="Name"
@@ -92,6 +124,10 @@ class HomeView extends Component {
             value={currentEmployee ? currentEmployee.phoneNumber : ''}
           />
         </div>
+        <EmployeeList
+          employees={employees}
+          onClick={this.onItemClick}
+        />
       </div>
     );
   }

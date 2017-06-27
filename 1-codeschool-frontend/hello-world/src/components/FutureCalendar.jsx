@@ -23,6 +23,7 @@ const defaultProps = {
   calendars: [],
 };
 
+
 class HomeView extends Component {
   state = {
     currentCalendar: this.props.calendars[0],
